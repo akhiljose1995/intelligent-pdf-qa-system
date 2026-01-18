@@ -24,6 +24,7 @@ class VectorStore:
         """
         Initialize or load a persistent ChromaDB vector store.
         """
+        print("Vectorstore dir:", settings.vectorstore_dir)
         self.embedder = Embedder()
 
         os.makedirs(settings.vectorstore_dir, exist_ok=True)

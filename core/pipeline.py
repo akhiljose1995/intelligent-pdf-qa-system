@@ -6,6 +6,7 @@ from core.vector_store import VectorStore
 from core.retriever import Retriever
 from core.generation_engine import GenerationEngine
 from core.models import DocumentChunk
+from core.errors import RetrievalError
 from utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -44,7 +45,12 @@ class PDFRAGPipeline:
         """
         Retrieve relevant context chunks for a query.
         """
-        return self.retriever.retrieve(query, k=k)
+        chunks = self.retriever.retrieve(query, k=k)
+
+        if not chunks:
+            raise RetrievalError("No relevant context found")
+
+        return chunks
 
     def generate(
         self,

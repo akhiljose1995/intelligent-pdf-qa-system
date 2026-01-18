@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain.messages import SystemMessage, HumanMessage
 
 from core.models import DocumentChunk
+from core.errors import GenerationError
 from config.settings import settings
 from utils.logger import setup_logger
 
@@ -60,6 +61,9 @@ class GenerationEngine:
             )
         ]
 
-        response = self.llm.invoke(messages)
-        return response.content
+        try:
+            response = self.llm.invoke(messages)
+            return response.content
+        except Exception as e:
+            raise GenerationError(str(e))
 
